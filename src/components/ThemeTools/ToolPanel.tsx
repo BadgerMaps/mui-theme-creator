@@ -1,6 +1,15 @@
 import React from "react"
 import Typography from "@material-ui/core/Typography"
-import { makeStyles, Theme, createStyles } from "@material-ui/core"
+import {
+  makeStyles,
+  Theme,
+  createStyles,
+  Box,
+  Grid,
+  IconButton,
+  Button,
+} from "@material-ui/core"
+import CloseIcon from "@material-ui/icons/Close"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,29 +22,84 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     toolPanelTitle: {
       paddingLeft: 16,
-      paddingRight: 16,
+      paddingRight: 8,
       borderBottom: `1px solid ${theme.palette.divider}`,
       borderTop: "1px solid grey",
+      minHeight: 40,
     },
     toolPanelContent: {
       flex: 1,
       overflowY: "auto",
       overflowX: "hidden",
     },
+    resetButton: {
+      textTransform: "capitalize",
+      marginRight: theme.spacing(0.5),
+    },
+    disabledButton: {
+      fontStyle: "italic",
+    },
+    titleActions: {
+      flexShrink: 0,
+    },
   })
 )
 
 export const toolPanelId = "theme-tool-panel"
 
-function ToolPanel({ panelTitle, children }) {
+type ToolPanelProps = {
+  panelTitle: string
+  children: React.ReactNode
+  onClose?: () => void
+  onReset?: () => void
+  resetDisabled?: boolean
+}
+
+function ToolPanel({
+  panelTitle,
+  children,
+  onClose,
+  onReset,
+  resetDisabled = false,
+}: ToolPanelProps) {
   const classes = useStyles()
   return (
-    <div id={toolPanelId} className={classes.toolPanel}>
-      <div className={classes.toolPanelTitle}>
-        <Typography variant="overline">{panelTitle}</Typography>
-      </div>
-      <div className={classes.toolPanelContent}>{children}</div>
-    </div>
+    <Box id={toolPanelId} className={classes.toolPanel}>
+      <Grid
+        container
+        justify="space-between"
+        alignItems="center"
+        wrap="nowrap"
+        className={classes.toolPanelTitle}
+      >
+        <Typography variant="overline" noWrap>
+          {panelTitle}
+        </Typography>
+        {(onReset || onClose) && (
+          <Grid item className={classes.titleActions}>
+            {onReset && (
+              <Button
+                size="small"
+                onClick={onReset}
+                disabled={resetDisabled}
+                classes={{
+                  root: classes.resetButton,
+                  disabled: classes.disabledButton,
+                }}
+              >
+                Reset
+              </Button>
+            )}
+            {onClose && (
+              <IconButton size="small" onClick={onClose} aria-label="Close">
+                <CloseIcon />
+              </IconButton>
+            )}
+          </Grid>
+        )}
+      </Grid>
+      <Box className={classes.toolPanelContent}>{children}</Box>
+    </Box>
   )
 }
 

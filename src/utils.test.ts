@@ -115,6 +115,83 @@ describe("removeByPath Tests", () => {
   })
 })
 
+describe("hover override paths", () => {
+  test("setByPath writes nested &:hover keys", () => {
+    const result = utils.setByPath(
+      {},
+      "overrides.MuiButton.root.&:hover.color",
+      "#fff"
+    )
+    expect(result).toEqual({
+      overrides: {
+        MuiButton: {
+          root: {
+            "&:hover": {
+              color: "#fff",
+            },
+          },
+        },
+      },
+    })
+  })
+
+  test("getByPath reads nested &:hover keys", () => {
+    const data = {
+      overrides: {
+        MuiButton: {
+          root: {
+            "&:hover": {
+              color: "#fff",
+            },
+          },
+        },
+      },
+    }
+    expect(
+      utils.getByPath(data, "overrides.MuiButton.root.&:hover.color")
+    ).toBe("#fff")
+  })
+
+  test("removeByPath prunes empty &:hover objects", () => {
+    const data = {
+      overrides: {
+        MuiButton: {
+          root: {
+            "&:hover": {
+              color: "#fff",
+            },
+          },
+        },
+      },
+    }
+    expect(
+      utils.removeByPath(data, "overrides.MuiButton.root.&:hover.color")
+    ).toEqual({})
+  })
+
+  test("removeByPath deletes an entire component override key", () => {
+    const data = {
+      palette: { type: "light" },
+      overrides: {
+        MuiButton: {
+          root: { backgroundColor: "#f00" },
+        },
+        MuiAccordion: {
+          root: { color: "#00f" },
+        },
+      },
+    }
+    expect(utils.removeByPath(data, "overrides.MuiButton")).toEqual({
+      palette: { type: "light" },
+      overrides: {
+        MuiAccordion: {
+          root: { color: "#00f" },
+        },
+      },
+    })
+  })
+})
+
 describe("isSetEq Tests", () => {
   test("Equal Sets return true", () => {
     expect(
