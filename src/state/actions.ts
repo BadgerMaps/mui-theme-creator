@@ -199,3 +199,12 @@ export const resetTutorialStep = () => ({ type: "RESET_TUTORIAL_STEP" })
 export const toggleTutorial = () => ({ type: "TOGGLE_TUTORIAL" })
 
 export const resetSiteData = () => ({ type: "RESET_SITE_DATA" })
+
+export const openComponentCustomize = (sampleId: string) => ({
+  type: "OPEN_COMPONENT_CUSTOMIZE",
+  sampleId,
+})
+
+export const closeComponentCustomize = () => ({
+  type: "CLOSE_COMPONENT_CUSTOMIZE",
+})
