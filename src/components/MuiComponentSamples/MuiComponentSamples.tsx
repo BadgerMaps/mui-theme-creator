@@ -1,7 +1,9 @@
 import React from "react"
-import { Typography, makeStyles, Button, Grid } from "@material-ui/core"
+import { Typography, makeStyles, Button, Grid, Box } from "@material-ui/core"
+import { useDispatch } from "react-redux"
 
 import componentSamples from "./Samples"
+import { openComponentCustomize } from "src/state/actions"
 
 const useStyles = makeStyles(theme => ({
   sampleItem: {
@@ -24,32 +26,45 @@ const useStyles = makeStyles(theme => ({
 
 const MuiComponentSamples = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   return (
-    <div className={classes.sampleContainer}>
+    <Box className={classes.sampleContainer}>
       <Typography variant="h4" gutterBottom>
         Material-UI Components
       </Typography>
       {componentSamples.map(({ id, title, component, docs }) => (
-        <div key={id} id={id}>
+        <Box key={id} id={id}>
           <Grid container justify="space-between" alignItems="center">
             <Typography variant="h5" gutterBottom>
               {title}
             </Typography>
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="small"
-              href={docs}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Docs
-            </Button>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                className={classes.docsButton}
+                onClick={() => dispatch(openComponentCustomize(id))}
+              >
+                Customize
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                className={classes.docsButton}
+                href={docs}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Docs
+              </Button>
+            </Grid>
           </Grid>
-          <div className={classes.sampleItem}>{component}</div>
-        </div>
+          <Box className={classes.sampleItem}>{component}</Box>
+        </Box>
       ))}
-    </div>
+    </Box>
   )
 }
 

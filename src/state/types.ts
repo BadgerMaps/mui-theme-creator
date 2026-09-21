@@ -15,6 +15,7 @@ export interface RootState {
   componentNavOpen: boolean
   themeConfigOpen: boolean
   mobileWarningSeen: boolean
+  customizingSampleId: string | null
 }
 
 export type SavedTheme = {

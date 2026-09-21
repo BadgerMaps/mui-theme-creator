@@ -35,6 +35,7 @@ const initialState: RootState = {
   componentNavOpen: false,
   themeConfigOpen: false,
   mobileWarningSeen: false,
+  customizingSampleId: null,
 }
 
 const initialFonts = ["Droid Sans", "Droid Serif", "Open Sans", "Roboto"]
@@ -198,6 +199,17 @@ export default (state = initialState, action) => {
       return {
         ...state,
         themeConfigOpen: !state.themeConfigOpen,
+      }
+    case "OPEN_COMPONENT_CUSTOMIZE":
+      return {
+        ...state,
+        customizingSampleId: action.sampleId,
+        themeConfigOpen: true,
+      }
+    case "CLOSE_COMPONENT_CUSTOMIZE":
+      return {
+        ...state,
+        customizingSampleId: null,
       }
     case "WARNING_SCREEN_SEEN":
       return {

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core"
+import { makeStyles, createStyles, Theme, Box } from "@material-ui/core"
 import BottomNavigation from "@material-ui/core/BottomNavigation"
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction"
 import PaletteTools from "./PaletteTools/PaletteTools"
@@ -14,6 +15,9 @@ import SnippetsIcon from "@material-ui/icons/PlaylistAdd"
 import ToolPanel from "./ToolPanel"
 import FontTools from "./FontTools/FontTools"
 import SnippetTools from "./SnippetTools"
+import ComponentCustomizeTools from "./ComponentCustomizeTools"
+import { RootState } from "src/state/types"
+import { closeComponentCustomize } from "src/state/actions"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -85,6 +89,10 @@ const toolPanels: Array<{
 export default function ThemeTools() {
   const classes = useStyles()
   const [bottomNavIndex, setBottomNavIndex] = useState(0)
+  const dispatch = useDispatch()
+  const customizingSampleId = useSelector(
+    (state: RootState) => state.customizingSampleId
+  )
 
   const bottomNavActionClasses = {
     selected: classes.selected,
@@ -94,8 +102,22 @@ export default function ThemeTools() {
 
   const currentTool = toolPanels[bottomNavIndex]
 
+  if (customizingSampleId) {
+    return (
+      <Box className={classes.themeToolsRoot}>
+        <ComponentCustomizeTools
+          sampleId={customizingSampleId}
+          onClose={() => {
+            setBottomNavIndex(0)
+            dispatch(closeComponentCustomize())
+          }}
+        />
+      </Box>
+    )
+  }
+
   return (
-    <div className={classes.themeToolsRoot}>
+    <Box className={classes.themeToolsRoot}>
       <ToolPanel panelTitle={currentTool.label}>
         <currentTool.tools />
       </ToolPanel>
@@ -117,6 +139,6 @@ export default function ThemeTools() {
           />
         ))}
       </BottomNavigation>
-    </div>
+    </Box>
   )
 }
